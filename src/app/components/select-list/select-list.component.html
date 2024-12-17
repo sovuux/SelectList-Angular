@@ -1,0 +1,53 @@
+<div class="select-list-container">
+	<div class="dropdown-header"
+	(click)="toggleDropdown()"
+	>
+		<mat-checkbox 
+    [(ngModel)]="isSelectAll" 
+    [indeterminate]="isIndeterminate" 
+    (change)="onSelectAllChange($event)"
+		(click)="$event.stopPropagation()"
+  	></mat-checkbox>
+		<div class="dropdown-actions" *ngIf="isDropdownOpen">
+			<span 
+				*ngIf="isNoneSelected()" 
+				(click)="selectAll(); 
+				$event.stopPropagation()"
+				>
+					Выбрать всё
+			</span>
+			<span 
+				*ngIf="isAnySelected()" 
+				(click)="clearAll(); 
+				$event.stopPropagation()"
+				>
+					Очистить всё</span>
+		</div>
+		<span *ngIf="!isDropdownOpen">{{ selectedSummary }}</span>
+  </div>
+
+
+	<div class="dropdown" *ngIf="isDropdownOpen">
+		<div class="dropdown-category" *ngFor="let category of categories">
+			<div class="dropdown-category-header">
+				<mat-checkbox
+          [(ngModel)]="category.selected"
+          (change)="onCategoryChange(category)"
+          ></mat-checkbox>
+					<span (click)="toggleListItems(category)">{{ category.name }}</span>
+			</div>
+			<div class='dropdown-items' *ngIf="category.isExpanded"
+			>
+				<mat-checkbox
+					*ngFor="let item of category.items"
+					[(ngModel)]="item.selected"
+					(change)="onItemChange()"
+					[style.background-color]="item.color"
+    			class="colored-checkbox"
+				>
+					{{ item.name }}
+				</mat-checkbox>
+			</div>
+		</div>
+	</div>
+</div>
